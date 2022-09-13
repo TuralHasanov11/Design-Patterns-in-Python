@@ -17,7 +17,8 @@ class Creator(ABC):
         """
         pass
 
-    def some_operation(self, product: Product) -> str:
+    @abstractmethod
+    def some_operation(self) -> str:
         """
         Also note that, despite its name, the Creator's primary responsibility
         is not creating products. Usually, it contains some core business logic
@@ -25,14 +26,7 @@ class Creator(ABC):
         Subclasses can indirectly change that business logic by overriding the
         factory method and returning a different type of product from it.
         """
-
-        # Call the factory method to create a Product object.
-        product = self.factory_method(product)
-
-        # Now, use the product.
-        result = f"Creator: The same creator's code has just worked with {product.operation()}"
-
-        return result
+        pass
 
 
 """
@@ -48,13 +42,33 @@ class ConcreteCreator1(Creator):
     way the Creator can stay independent of concrete product classes.
     """
 
-    def factory_method(self, product: Product) -> Product:
-        return product
+    def factory_method(self) -> Product:
+        return ConcreteProduct1()
+    
+    def some_operation(self) -> str:
+
+        # Call the factory method to create a Product object.
+        product = self.factory_method()
+
+        # Now, use the product.
+        result = f"Concrete Creator 1: has just worked with {product.operation()}"
+
+        return result
 
 
 class ConcreteCreator2(Creator):
-    def factory_method(self, product: Product) -> Product:
-        return product
+    def factory_method(self) -> Product:
+        return ConcreteProduct2()
+    
+    def some_operation(self) -> str:
+
+        # Call the factory method to create a Product object.
+        product = self.factory_method()
+
+        # Now, use the product.
+        result = f"Concrete Creator 2: has just worked with {product.operation()}"
+
+        return result
 
 
 class Product(ABC):
@@ -95,9 +109,9 @@ def client_code(creator: Creator) -> None:
 
 
 if __name__ == "__main__":
-    print("App: Launched Product 1 with the ConcreteCreator1.")
+    print("App: Launched with the ConcreteCreator1.")
     client_code(ConcreteCreator1())
     print("\n")
 
-    print("App: Launched Product 2 with the ConcreteCreator2.")
+    print("App: Launched with the ConcreteCreator2.")
     client_code(ConcreteCreator2())
